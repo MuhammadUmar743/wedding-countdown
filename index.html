@@ -24,6 +24,8 @@ body {
   width:100%; max-width:1000px; background:rgba(255,255,255,.92);
   border:1px solid #e4d5c5; border-radius:12px; padding:45px;
   text-align:center; box-shadow:0 25px 70px rgba(0,0,0,.08);
+  position: relative;
+overflow: hidden;
 }
 .top { color:var(--gold); letter-spacing:4px; font-size:12px; text-transform:uppercase; }
 h1 { color:var(--wine); font-size:58px; font-weight:400; margin:18px 0; overflow-wrap:anywhere; }
@@ -56,6 +58,39 @@ button:hover { background:#553b3f; }
   .number { font-size:34px; }
   .names input { width:100%; }
 }
+  
+/* Simple floral corner decorations */
+.container::before,
+.container::after {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  color: #d9a99e;
+  opacity: 0.42;
+  font-size: 66px;
+  line-height: 1.1;
+}
+
+.container::before {
+  content: "❀";
+  top: 8px;
+  left: 10px;
+}
+
+.container::after {
+  content: "✿";
+  bottom: 8px;
+  right: 10px;
+}
+
+@media (max-width: 700px) {
+  .container::before,
+  .container::after {
+    font-size: 38px;
+    opacity: 0.3;
+  }
+}
+
 </style>
 </head>
 <body>
