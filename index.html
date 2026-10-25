@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Wedding Countdown</title>
+
+<style>
+:root{
+ --cream:#faf6f0;
+ --wine:#6d4c52;
+ --gold:#b8905a;
+ --text:#3d2d2f;
+ --muted:#8a7874;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+ font-family:Georgia,serif;
+ background:
+ radial-gradient(circle at top left,#efe1d6,transparent 40%),
+ radial-gradient(circle at bottom right,#f0e7da,transparent 40%),
+ var(--cream);
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
+ color:var(--text);
+}
+
+.container{
+ width:100%;
+ max-width:1000px;
+ background:rgba(255,255,255,.92);
+ border:1px solid #e4d5c5;
+ border-radius:12px;
+ padding:45px;
+ text-align:center;
+ box-shadow:0 25px 70px rgba(0,0,0,.08);
+}
+
+.top{
+ color:var(--gold);
+ letter-spacing:4px;
+ font-size:12px;
+ text-transform:uppercase;
+}
+
+h1{
+ color:var(--wine);
+ font-size:58px;
+ font-weight:400;
+ margin:18px 0;
+}
+
+.sub{
+ color:var(--muted);
+ font-style:italic;
+ margin-bottom:30px;
+}
+
+.names{
+ display:flex;
+ gap:10px;
+ justify-content:center;
+ flex-wrap:wrap;
+ margin-bottom:25px;
+}
+
+.names input{
+ width:220px;
+}
+
+input{
+ padding:14px;
+ border:1px solid #dcc9b5;
+ border-radius:6px;
+ font-size:15px;
+}
+
+.datebox{
+ max-width:420px;
+ margin:auto;
+}
+
+label{
+ display:block;
+ text-align:left;
+ margin-bottom:8px;
+ font-size:12px;
+ color:var(--muted);
+ text-transform:uppercase;
+ letter-spacing:1px;
+}
+
+#date{
+ width:100%;
+}
+
+button{
+ margin-top:18px;
+ background:var(--wine);
+ color:white;
+ border:none;
+ padding:15px 28px;
+ border-radius:6px;
+ cursor:pointer;
+ font-size:13px;
+ letter-spacing:2px;
+ text-transform:uppercase;
+}
+
+button:hover{
+ background:#553b3f;
+}
+
+.timer{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:12px;
+ margin:35px 0;
+}
+
+.box{
+ background:white;
+ border:1px solid #e7d8c6;
+ border-radius:8px;
+ padding:22px 10px;
+}
+
+.number{
+ display:block;
+ color:var(--wine);
+ font-size:40px;
+ font-weight:bold;
+}
+
+.box small{
+ display:block;
+ margin-top:8px;
+ color:var(--gold);
+ font-size:11px;
+ letter-spacing:1px;
+}
+
+.info{
+ border-top:1px solid #e8d9c8;
+ padding-top:20px;
+ color:var(--muted);
+ line-height:2;
+}
+
+.info strong{
+ color:var(--wine);
+}
+
+#message{
+ margin-top:20px;
+ color:var(--wine);
+ font-size:18px;
+ font-style:italic;
+}
+
+@media(max-width:700px){
+
+ h1{
+  font-size:42px;
+ }
+
+ .timer{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .box:last-child{
+  grid-column:1/-1;
+ }
+
+ .container{
+  padding:28px;
+ }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">A Celebration of Love</div>
+
+<h1 id="title">Our Wedding Day</h1>
+
+<p class="sub">Every second brings us closer to forever.</p>
+
+<div class="names">
+<input id="name1" placeholder="Emma">
+<input id="name2" placeholder="James">
+</div>
+
+<div class="datebox">
+<label>Select Wedding Date & Time</label>
+
+<!-- IMPORTANT FIX -->
+<input id="date"
+type="datetime-local"
+min="2026-01-01T00:00"
+max="2100-12-31T23:59">
+
+<button id="start">Start Countdown</button>
+</div>
+
+<div class="timer">
+
+<div class="box">
+<span class="number" id="months">0</span>
+<small>MONTHS</small>
+</div>
+
+<div class="box">
+<span class="number" id="days">0</span>
+<small>DAYS</small>
+</div>
+
+<div class="box">
+<span class="number" id="hours">00</span>
+<small>HOURS</small>
+</div>
+
+<div class="box">
+<span class="number" id="minutes">00</span>
+<small>MINUTES</small>
+</div>
+
+<div class="box">
+<span class="number" id="seconds">00</span>
+<small>SECONDS</small>
+</div>
+
+</div>
+
+<div class="info">
+
+<p>Total Days Remaining:
+<strong id="totalDays">0</strong></p>
+
+<p>Wedding Date:
+<strong id="displayDate">Not selected</strong></p>
+
+</div>
+
+<div id="message">
+Choose your special day to begin.
+</div>
+
+</div>
+
+<script>
+const name1=document.getElementById("name1");
+const name2=document.getElementById("name2");
+const title=document.getElementById("title");
+const dateInput=document.getElementById("date");
+
+let timer;
+
+function updateNames(){
+
+if(name1.value&&name2.value){
+
+title.textContent=name1.value+" & "+name2.value;
+
+}else{
+
+title.textContent="Our Wedding Day";
+
+}
+
+}
+
+name1.oninput=updateNames;
+name2.oninput=updateNames;
+
+function addMonths(date,m){
+
+let d=new Date(date);
+
+let day=d.getDate();
+
+d.setDate(1);
+
+d.setMonth(d.getMonth()+m);
+
+let last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+
+d.setDate(Math.min(day,last));
+
+return d;
+
+}
+
+function updateCountdown(){
+
+const target=new Date(dateInput.value);
+
+if(isNaN(target)) return;
+
+const now=new Date();
+
+if(target<=now){
+
+document.getElementById("message").textContent="Today is your special day! ❤️";
+
+clearInterval(timer);
+
+return;
+
+}
+
+let months=(target.getFullYear()-now.getFullYear())*12+(target.getMonth()-now.getMonth());
+
+let anchor=addMonths(now,months);
+
+if(anchor>target){
+
+months--;
+
+anchor=addMonths(now,months);
+
+}
+
+let remain=target-anchor;
+
+let days=Math.floor(remain/86400000);
+
+let hours=Math.floor(remain%86400000/3600000);
+
+let minutes=Math.floor(remain%3600000/60000);
+
+let seconds=Math.floor(remain%60000/1000);
+
+document.getElementById("months").textContent=months;
+document.getElementById("days").textContent=days;
+document.getElementById("hours").textContent=String(hours).padStart(2,"0");
+document.getElementById("minutes").textContent=String(minutes).padStart(2,"0");
+document.getElementById("seconds").textContent=String(seconds).padStart(2,"0");
+
+document.getElementById("totalDays").textContent=Math.floor((target-now)/86400000);
+
+document.getElementById("displayDate").textContent=target.toLocaleString();
+
+document.getElementById("message").textContent="Forever begins in...";
+
+}
+
+document.getElementById("start").onclick=()=>{
+
+if(!dateInput.value){
+
+alert("Please select a wedding date.");
+
+return;
+
+}
+
+clearInterval(timer);
+
+updateCountdown();
+
+timer=setInterval(updateCountdown,1000);
+
+};
+</script>
+
+</body>
+</html>
