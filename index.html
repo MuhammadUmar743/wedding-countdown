@@ -59,37 +59,55 @@ button:hover { background:#553b3f; }
   .names input { width:100%; }
 }
   
-/* Simple floral corner decorations */
+
+/* Elegant full floral frame */
+.container {
+  isolation: isolate;
+  border: 2px solid #e8c9c7;
+  outline: 1px solid #d9b58c;
+  outline-offset: -9px;
+  background:
+    radial-gradient(ellipse at 0% 0%, #f4d8d8 0%, transparent 24%),
+    radial-gradient(ellipse at 100% 0%, #f3e4d4 0%, transparent 23%),
+    radial-gradient(ellipse at 0% 100%, #f3e1d9 0%, transparent 25%),
+    radial-gradient(ellipse at 100% 100%, #f4d4d8 0%, transparent 24%),
+    rgba(255,255,255,.96);
+}
+
 .container::before,
 .container::after {
+  content: "🌿 ❀ 🌸 🌹 ❀ 🌿";
   position: absolute;
+  z-index: -1;
   pointer-events: none;
-  z-index: 0;
-  color: #d9a99e;
-  opacity: 0.42;
-  font-size: 66px;
-  line-height: 1.1;
+  color: #c9878d;
+  font-size: 30px;
+  letter-spacing: 3px;
+  line-height: 1.8;
+  opacity: .8;
+  width: 100%;
+  text-align: center;
 }
 
 .container::before {
-  content: "❀";
-  top: 8px;
-  left: 10px;
+  top: 0;
+  left: 0;
 }
 
 .container::after {
-  content: "✿";
-  bottom: 8px;
-  right: 10px;
+  content: "🌿 🌸 ❀ 🌹 ❀ 🌸 🌿";
+  bottom: 0;
+  left: 0;
 }
 
-@media (max-width: 700px) {
+@media(max-width:700px) {
   .container::before,
   .container::after {
-    font-size: 38px;
-    opacity: 0.3;
+    font-size: 17px;
+    letter-spacing: 1px;
   }
 }
+
 
 </style>
 </head>
